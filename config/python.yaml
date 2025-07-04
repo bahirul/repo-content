@@ -1,0 +1,9 @@
+include:
+  - "*.py"
+  - "requirements.txt"
+  - "config/*.yaml"
+exclude:
+  - "venv/*"
+  - ".gitignore"
+  - ".git/*"
+  - "build/*"
