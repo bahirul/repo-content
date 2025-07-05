@@ -1,0 +1,11 @@
+# example for python projects, adjust as needed based on your project structure
+
+include:
+  - "*.py"
+
+exclude:
+  - "dist/*"
+  - ".git/*"
+  - "build/*"
+  - "venv/*"
+  

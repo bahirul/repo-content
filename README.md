@@ -1,145 +1,106 @@
------
+Here's a clean and professional `README.md` documentation for your **repo content generator** project:
 
-# Repository Content Generator
+---
 
-This project provides a Python script, `repo_content_generator.py`, designed to summarize the content of a given repository. It allows for flexible inclusion and exclusion of files based on patterns defined in YAML or JSON configuration files, making it ideal for generating documentation, code summaries, or project overviews.
+# Repo Content Generator
 
------
+This Python utility generates a readable summary of the source code files within a given project directory. It supports custom include/exclude patterns via a YAML or JSON configuration file, making it ideal for documenting repositories, preparing technical reviews, or creating educational materials.
+
+---
 
 ## Features
 
-  * **Configurable File Filtering**: Easily specify which files and directories to include or exclude using glob-style patterns in configuration files.
-  * **Multiple Configuration Formats**: Supports both YAML and JSON for defining include/exclude patterns.
-  * **Directory Traversal**: Recursively scans through the specified project directory to find relevant files.
-  * **Output Options**: Prints the generated content to the console or saves it to a specified output file.
+* ✅ Traverse a project directory recursively
+* ✅ Include or exclude files based on glob patterns
+* ✅ Outputs formatted code blocks per file
+* ✅ Cleans outdated generated files from the output directory
+* ✅ Supports YAML or JSON config formats
 
------
+---
 
-## Getting Started
+## Installation
 
-These instructions will get you a copy of the project up and running on your local machine.
+To run this script, ensure you have Python 3.6+ installed. Clone the repository and install the required packages:
 
-### Prerequisites
+```bash
+pip install -r requirements.txt
+```
 
-You need **Python 3.6+** installed on your system.
-
-### Installation
-
-1.  **Clone the repository**:
-    ```bash
-    git clone <repository_url>
-    cd <repository_name>
-    ```
-2.  **Install the required dependencies**:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
------
+---
 
 ## Usage
 
-The `repo_content_generator.py` script can be run from the command line with several arguments.
-
 ```bash
-python repo_content_generator.py --project <root_project_directory> --config <config_file> [--output <output_file>]
+python repo_content_generator.py \
+  --project path/to/your/project \
+  --config path/to/config.yaml \
+  --output output/summary.txt
 ```
 
 ### Arguments
 
-  * `-p`, `--project`: **(Required)** The root directory of the project you want to summarize.
-  * `-c`, `--config`: **(Required)** The path to a YAML or JSON configuration file that defines the include and exclude patterns.
-  * `-o`, `--output`: **(Optional)** The name of the file where the generated content will be saved. If not provided, the output will be printed to the console. The default output filename is `output/repo_content_<timestamp>.txt`.
+| Flag            | Description                                                          | Required |
+| --------------- | -------------------------------------------------------------------- | -------- |
+| `--project, -p` | Root path of the target repository                                   | ✅        |
+| `--config, -c`  | Path to YAML or JSON config file (include/exclude)                   | ✅        |
+| `--output, -o`  | Output file path (defaults to `output/repo_content_<timestamp>.txt`) | ❌        |
 
-### Configuration Files
+---
 
-The project uses configuration files (either YAML or JSON) to determine which files to include and exclude from the summary.
+## Configuration File
 
-  * **`include`**: A list of glob-style patterns for files and directories to include.
-  * **`exclude`**: A list of glob-style patterns for files and directories to exclude. Exclude patterns take precedence over include patterns.
+You must supply a config file (YAML or JSON) with the desired `include` and `exclude` patterns using Unix shell-style wildcards.
 
-#### Example Configuration (`config/python.yaml`):
+### Example: `example.config.yaml`
 
 ```yaml
 include:
   - "*.py"
-  - "requirements.txt"
-  - "config/*.yaml"
-exclude:
-  - "venv/*"
-  - ".gitignore"
-  - ".git/*"
-  - "build/*"
-```
 
-#### Example Configuration (`config/nodejs.yaml`):
-
-```yaml
-include:
-  - "*.ts"
-  - "*.js"
 exclude:
   - "dist/*"
-  - ".gitignore"
   - ".git/*"
   - "build/*"
-  - "node_modules/*"
+  - "venv/*"
 ```
 
-### Examples
+* **`include`**: Files to include (if omitted, includes everything unless excluded)
+* **`exclude`**: Files to exclude (if omitted, includes all that match the include patterns)
 
-1.  **Generate content for a Python project and print to console:**
+---
 
-    ```bash
-    python repo_content_generator.py --project . --config config/python.yaml
-    ```
+## Output
 
-    (Assuming your current directory is the root of your Python project.)
-
-2.  **Generate content for a Node.js project and save to a file:**
-
-    ```bash
-    python repo_content_generator.py --project /path/to/my/nodejs/app --config config/nodejs.yaml --output my_nodejs_summary.txt
-    ```
-
------
-
-## Project Structure
+The output is a text file containing sections like:
 
 ```
-.
-├── repo_content_generator.py   # Main script to generate repository content
-├── requirements.txt            # Python dependencies
-└── config/
-    ├── python.yaml             # Example configuration for Python projects
-    └── nodejs.yaml             # Example configuration for Node.js projects
+Files: src/main.py
+
+<SOURCE CODE BLOCK>
 ```
 
------
+Each included file is wrapped in a Markdown-style code block for easy rendering and readability.
 
-## Contributing to Repository Content Generator
+---
 
-Want to help make this project better? Awesome\! Here's how you can contribute.
+## Output Directory Cleanup
 
------
+Generated files older than **1 day** in the `output/` folder (except `.gitignore`) are automatically deleted before each run.
 
-### Found a Bug?
+---
 
-If something's broken, please [open an issue](https://github.com/bahirul/repo-content/issues) on GitHub. Tell us what went wrong and how we can see it too.
+## Example
 
-### Have an Idea?
+```bash
+python repo_content_generator.py \
+  --project ./my-python-app \
+  --config ./example.config.yaml
+```
 
-Got a suggestion for a new feature or an improvement? [Open an issue](https://github.com/bahirul/repo-content/issues) and share your thoughts\!
+Sample output path:
 
-### Want to Code?
+```
+output/repo_content_1720173312.txt
+```
 
-If you'd like to write code to fix a bug or add a feature:
-
-1.  **Fork** this project.
-2.  **Clone** your copy to your computer.
-3.  **Create a new branch** for your changes.
-4.  **Make your changes**.
-5.  **Test your code**.
-6.  **Commit** your changes with a clear message.
-7.  **Push** your branch.
-8.  **Open a Pull Request** to our main project. Explain what you did\!
+---

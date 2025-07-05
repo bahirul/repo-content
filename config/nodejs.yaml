@@ -1,9 +1,0 @@
-include:
-  - "*.ts"
-  - "*.js"
-exclude:
-  - "dist/*"
-  - ".gitignore"
-  - ".git/*"
-  - "build/*"
-  - "node_modules/*"

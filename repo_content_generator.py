@@ -14,6 +14,20 @@ def should_include(file_path, should_include_patterns, should_exclude_patterns):
     """Check if a file should be included based on include and exclude patterns."""
     included = any(fnmatch.fnmatch(file_path, pat) for pat in should_include_patterns)
     excluded = any(fnmatch.fnmatch(file_path, pat) for pat in should_exclude_patterns)
+
+    # include if no patterns are specified
+    if len(should_include_patterns) == 0 and len(should_exclude_patterns) == 0:
+        return True
+
+    # include if no include patterns are specified and at least one exclude pattern is specified
+    if len(should_include_patterns) == 0 and len(should_exclude_patterns) > 0:
+        return not excluded
+
+    # include if at least one include pattern is specified and no exclude patterns are specified
+    if len(should_include_patterns) > 0 and len(should_exclude_patterns) == 0:
+        return included
+
+    # default will include only and exclude based on patterns
     return included and not excluded
 
 
@@ -65,7 +79,26 @@ def generate_repo_content(
         print(final_output)
 
 
+def clean_output_directory(output_dir):
+    """Clean the output directory by removing all files except .gitignore."""
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    for filename in os.listdir(output_dir):
+        file_path = os.path.join(output_dir, filename)
+        if filename != ".gitignore" and os.path.isfile(file_path):
+            # check if the file more than 1 day old
+            if os.path.getmtime(file_path) < time.time() - 86400:
+                # remove the file
+                print(f"Removing {file_path} (older than 1 day)")
+                os.remove(file_path)
+                print(f"Removed {file_path}")
+
+
 if __name__ == "__main__":
+    # Clean the output directory
+    OUTPUT_DIR = "output"
+    clean_output_directory(OUTPUT_DIR)
+
     parser = argparse.ArgumentParser(description="Generate repo content summary.")
     parser.add_argument("-p", "--project", help="Root project directory", required=True)
     parser.add_argument(
